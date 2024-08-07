@@ -1,0 +1,114 @@
+//
+// base.prisma
+//
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+generator prismaClassGenerator {
+  provider               = "prisma-class-generator"
+  output                 = "../src/.gen/prisma-class"
+  dryRun                 = "false"
+  separateRelationFields = "false"
+}
+
+generator nestjsDto {
+  provider                        = "prisma-generator-nestjs-dto"
+  output                          = "../src/.gen/dto"
+  outputToNestJsResourceStructure = "false"
+  exportRelationModifierClasses   = "true"
+  reExport                        = "true"
+  createDtoPrefix                 = "Create"
+  updateDtoPrefix                 = "Update"
+  classValidation                 = "true"
+  prettier                        = "true"
+  dtoSuffix                       = "Dto"
+  entityPrefix                    = ""
+  requiredResponseApiProperty     = "false"
+  entitySuffix                    = ""
+  fileNamingStyle                 = "camel"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Employee {
+  id          String             @id @default(uuid())
+  code        String             @unique
+  /// @IsEmail
+  email       String             @unique
+  /// @minimum 6
+  /// @DtoEntityHidden
+  password    String
+  fullname    String
+  role        Role
+  internship_position   String?
+  current_school        String?
+  skills                String?
+  internship_start_time DateTime?
+  internship_end_time   DateTime?
+  timeEntries TimeEntryProject[]
+}
+
+model Project {
+  id          String        @id @default(uuid())
+  code        String        @unique
+  name        String
+  description String?
+  status      StatusProject
+  type        TypeProject
+  typeLeave   TypeLeave?
+  limit       Int
+  startDate   DateTime
+  endDate     DateTime
+  startedAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  timeEntries TimeEntryProject[]
+}
+
+model TimeEntryProject {
+  id         String   @id @default(uuid())
+  date       DateTime @default(now())
+  /// @IsInt
+  hours      Int
+  overtime    Int @default(0)
+  /// @DtoRelationCanConnectOnUpdate
+  /// @DtoRelationCanConnectOnCreate
+  employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  employeeId String
+  /// @DtoRelationCanConnectOnUpdate
+  /// @DtoRelationCanConnectOnCreate
+  project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId  String
+}
+
+enum TypeProject {
+  LEAVE
+  PROJECT
+  OVERTIME
+}
+
+enum TypeLeave {
+  SICK
+  ANNUAL
+  VACATION
+  CLASS_SCHEDULE
+  INTERN
+}
+
+enum Role {
+  MANAGER
+  EMPLOYEE
+}
+
+enum StatusProject {
+  NOT_STARTED
+  ONGOING
+  COMPLETED
+}

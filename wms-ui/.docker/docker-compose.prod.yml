@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  wms-ui:
+    container_name: wms-ui
+    restart: always
+    build:
+      context: ../
+      dockerfile: ./.docker/Dockerfile.prod
+      args:
+        - PORT=${PORT_PRODUCTION}
+    environment:
+      VITE_VERSION_API: ${VITE_BASE_API}
+      VITE_BASE_API: ${VITE_BASE_API}
+    ports:
+      - ${PORT_PRODUCTION}:80
+
+    volumes:
+      - ../src:/wms-ui/src/
+    networks:
+      - wms_ui
+
+networks:
+  wms_ui:
+    driver: bridge

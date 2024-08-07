@@ -1,0 +1,17 @@
+FROM node:20-alpine
+
+
+ARG NODE_ENV=production
+ARG PORT=80
+ENV PORT $PORT
+RUN npm install -g pnpm@latest
+
+USER node
+WORKDIR /wms-ui
+COPY --chown=node:node package.json pnpm-lock.yaml* ./
+ENV PATH /wms-api/node_modules/.bin:$PATH
+COPY --chown=node:node . .
+RUN npx rimraf ./dist && pnpm install && pnpm build
+CMD ["pnpm", "start:prod"]
+EXPOSE $PORT
+

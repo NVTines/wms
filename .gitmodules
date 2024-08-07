@@ -1,0 +1,6 @@
+[submodule "wms-ui"]
+	path = wms-ui
+	url = git@github.com:kidp2h/wms-ui.git
+[submodule "wms-api"]
+	path = wms-api
+	url = git@github.com:kidp2h/wms-api.git

@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "module": "Node16",
+    "allowJs": true,
+    "maxNodeModuleJsDepth": 10,
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "strictPropertyInitialization": false,
+    "esModuleInterop": true,
+    "target": "ES6",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "strictBindCallApply": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+  },
+
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.ejs"
+  ],
+  "exclude": ["./prisma/*.ts"],
+}

@@ -1,0 +1,14 @@
+---
+version: '3.7'
+services:
+  wms-db:
+    image: mysql:8.0
+    restart: always
+    volumes: [wms-data:/var/lib/mysql]
+    ports: [3306:3306]
+    environment:
+      MYSQL_ROOT_PASSWORD:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+      MYSQL_DATABASE: cham_cong
+volumes:
+  wms-data:
